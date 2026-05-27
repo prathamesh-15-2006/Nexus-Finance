@@ -39,7 +39,7 @@ import CalculatorUI from './components/CalculatorUI';
 import Team from './components/Team.tsx';
 import Services from './components/Services.tsx';
 import CompanyTransparency from './components/CompanyTransparency.tsx';
-import WhychooseUs from './components/WhychooseUs.tsx';
+import WhychooseUs from './components/WhyChooseUS.tsx';
 import Process from './components/Process.tsx';
 // import ComplaintsPolicy from './components/Footer-Terms/Complaints-Policy';
 
