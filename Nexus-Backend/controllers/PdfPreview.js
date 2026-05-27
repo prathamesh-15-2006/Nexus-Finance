@@ -47,10 +47,10 @@ const submitPdfPreviewForm = async (req, res) => {
 
     // Send email to admin
     const adminEmailResult = await sendEmail({
-      email: "prathamesh@nexusfinance.com.au",
+      email: "prathameshkate7717@gmail.com",
       subject: adminSubject,
       message: adminMessage,
-      sender: "prathamesh@nexusfinance.com.au",
+      sender: "prathameshkate7717@gmail.com",
     });
 
     if (!adminEmailResult.success) {

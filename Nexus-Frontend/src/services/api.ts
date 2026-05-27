@@ -1,5 +1,5 @@
 // API base URL: uses proxy in development, full URL in production
-const API_BASE_URL = import.meta.env.DEV ? '/api' : 'https://Nexusrm-new-backend.onrender.com/api';
+const API_BASE_URL = import.meta.env.DEV ? '/api' : 'http://localhost:5000/api';
 // const API_BASE_URL = import.meta.env.DEV ? 'http://localhost:5000/api' : 'https://Nexusrm-new-backend.onrender.com/api';
 
 
@@ -84,7 +84,7 @@ const mapContactLead = (data: any): Lead => ({
   leadScore: 50,
   createdAt: data.submittedAt || new Date().toISOString(),
   visitedPages: [],
-  remarks: data.message || `Business: ${data.trading_name}, ABN: ${data.business_abn}, Loan Type: ${data.loan_type}`,
+  remarks: data.message || `Business: ${data.trading_name}, Loan Type: ${data.loan_type}`,
   estimatedValue: data.loan_amount,
   formType: 'Contact Form',
   type: 'contact',

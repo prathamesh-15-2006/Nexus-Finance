@@ -40,11 +40,6 @@ const PartnerApplicationSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
-    businessAbn: {
-        type: String, // ABNs are usually stored as strings
-        required: [true, 'ABN is required'],
-        trim: true
-    },
 
     // --- Address Details ---
     streetAddress: {

@@ -9,7 +9,6 @@ const submitContactForm = async (req, res) => {
       name,
       email,
       phone,
-      business_abn,
       trading_name,
       credit_rating,
       loan_type,
@@ -53,7 +52,6 @@ const submitContactForm = async (req, res) => {
       <p><strong>Name:</strong> ${name}</p>
       <p><strong>Email:</strong> ${email}</p>
       <p><strong>Phone:</strong> ${phone}</p>
-      <p><strong>Business ABN/ACN:</strong> ${business_abn || 'N/A'}</p>
       <p><strong>Trading Name:</strong> ${trading_name || 'N/A'}</p>
       <p><strong>Credit Rating:</strong> ${credit_rating}</p>
       <p><strong>Type of Loan:</strong> ${loan_type}</p>
@@ -64,10 +62,10 @@ const submitContactForm = async (req, res) => {
 
     // Send email to admin
     const adminEmailResult = await sendEmail({
-      email: "prathamesh@nexusfinance.com.au",
+      email: "prathameshkate7717@gmail.com",
       subject: adminSubject,
       message: adminMessage,
-      sender: "prathamesh@nexusfinance.com.au",
+      sender: "prathameshkate7717@gmail.com",
     });
 
     if (!adminEmailResult.success) {
@@ -105,7 +103,6 @@ const submitContactForm = async (req, res) => {
       name,
       email,
       phone,
-      business_abn,
       trading_name,
       credit_rating,
       loan_type,

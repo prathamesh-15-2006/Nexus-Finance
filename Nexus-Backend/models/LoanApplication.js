@@ -169,10 +169,6 @@ const loanApplicationSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
-  business_abn: {
-    type: String,
-    default: null,
-  },
   business_years: {
     type: Number,
     default: null,

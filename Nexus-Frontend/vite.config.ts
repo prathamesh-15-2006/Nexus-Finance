@@ -23,7 +23,7 @@ export default defineConfig({
   server: {
   proxy: {
     '/api': {
-      target: 'https://Nexus-crm-new-backend.onrender.com',
+      target: 'http://localhost:5000',
       changeOrigin: true,
       secure: false,
     },

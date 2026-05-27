@@ -15,7 +15,6 @@ const marqueeItems = [
   "Minimum 6 months trading",
   "Loans from $20,000",
   "Sole traders & companies welcome",
-  "n ABN required",
   "No hidden fees",
   "Flexible payments",
   "Same day cash transfer",

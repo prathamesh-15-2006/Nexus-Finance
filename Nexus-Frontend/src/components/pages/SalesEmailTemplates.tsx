@@ -394,6 +394,13 @@ export default function SalesEmailTemplates() {
       return;
     }
 
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(recipientEmail)) {
+      setDialog({ isOpen: true, title: 'Invalid Email', message: 'Please enter a valid email address.' });
+      return;
+    }
+
     setSending(true);
     try {
       const token = localStorage.getItem('token');
@@ -405,9 +412,8 @@ export default function SalesEmailTemplates() {
 
       const template = templates.find(t => t.id === selectedTemplate);
 
-      // const response = await fetch('http://localhost:5000/api/emails/manual-send', {
-              const response = await fetch('https://Nexus-new-backend.onrender.com/api/emails/manual-send', {
-
+      // Use relative /api so Vite proxy + same-origin rules apply consistently
+      const response = await fetch('/api/emails/manual-send', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -423,9 +429,14 @@ export default function SalesEmailTemplates() {
             },
             isCustom: true
           } : {
-            recipientEmail: recipientEmail,
+            templateId: selectedTemplate.toString(),
+            toEmail: recipientEmail,
             subject: customSubject || template?.subject,
-            content: generateEmailBody(template)
+            dynamicValues: {
+              name: recipientName || 'Valued Customer',
+              message: customContents[selectedTemplate] || ''
+            },
+            isCustom: false
           }
         ),
       });
@@ -910,10 +921,8 @@ export default function SalesEmailTemplates() {
                   </div>
                 </div>
                 <div className={`text-sm space-y-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                  <p>© 2025 Nexusance. All rights reserved.</p>
-                  <p>ABN: 73 685 074 631 | ACN: 685 074 631</p>
-                  <p>CRN No: 567862 under ACL 530764 of Finstead Capital Pty Ltd (Sub-Aggregator)</p>
-                  <p>Parramatta, NSW, de, SA</p>
+                  <p> </p>
+                  <p> | </p>
                 </div>
                 <div className="mt-4 flex gap-4">
                   <a href="https://www.Nexusnce.com.au/" className="text-blue-600 hover:text-blue-800 underline text-sm font-medium">

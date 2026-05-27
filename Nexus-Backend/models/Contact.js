@@ -13,10 +13,6 @@ const contactSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  business_abn: {
-    type: String,
-    default: null,
-  },
   trading_name: {
     type: String,
     default: null,

@@ -141,11 +141,6 @@ export default function ApplicationForm({ initialLoanType }: ApplicationFormProp
     return phoneRegex.test(phone.replace(/\s/g, ''));
   };
 
-  const validateABN = (abn: string): boolean => {
-    const abnRegex = /^\d{2}\s?\d{3}\s?\d{3}\s?\d{3}$/;
-    return abnRegex.test(abn);
-  };
-
   const updateField = (field: string, value: string | number | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
 

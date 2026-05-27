@@ -47,30 +47,65 @@ exports.adminSignup = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    const existingAdmin = await Admin.findOne({ email });
-    if (existingAdmin) {
-      return res.status(400).json({ message: "Email already exists" });
+    // Validation
+    if (!username || !email || !password) {
+      return res.status(400).json({
+        message: "All fields are required",
+      });
     }
 
+    const normalizedEmail = email.toLowerCase().trim();
+
+    // Check existing admin by email
+    const existingAdminByEmail = await Admin.findOne({
+      email: normalizedEmail,
+    });
+
+    if (existingAdminByEmail) {
+      return res.status(400).json({
+        message: "Email already exists",
+      });
+    }
+
+   
+
+    // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    // Create admin
     const admin = await Admin.create({
-      username,
-      email,
+      username: normalizedUsername,
+      email: normalizedEmail,
       password: hashedPassword,
     });
 
+    // Response without password
     res.status(201).json({
       message: "Admin created successfully",
-      admin,
+      admin: {
+        id: admin._id,
+        username: admin.username,
+        email: admin.email,
+      },
     });
+
   } catch (err) {
     console.error("Signup Error:", err);
-    res.status(500).json({ message: "Server error during signup" });
+
+    // Handle MongoDB duplicate key errors
+    if (err.code === 11000) {
+      const field = Object.keys(err.keyPattern)[0];
+      return res.status(400).json({
+        message: `${field.charAt(0).toUpperCase() + field.slice(1)} already exists`,
+      });
+    }
+
+    res.status(500).json({
+      message: "Server error during signup",
+    });
   }
 };
-
 // =============================
 // Admin Login
 // =============================
@@ -83,7 +118,7 @@ exports.adminLogin = async (req, res) => {
         .status(400)
         .json({ message: "Email and password are required" });
 
-    const admin = await Admin.findOne({ email });
+    const admin = await Admin.findOne({ email: email.toLowerCase().trim() });
     if (!admin) return res.status(404).json({ message: "Admin not found" });
 
     const isMatch = await bcrypt.compare(password, admin.password);
@@ -112,7 +147,7 @@ exports.forgotPassword = async (req, res) => {
     if (!email)
       return res.status(400).json({ message: "Email is required" });
 
-    const admin = await Admin.findOne({ email });
+    const admin = await Admin.findOne({ email: email.toLowerCase().trim() });
     if (!admin)
       return res.status(404).json({ message: "Admin not found" });
 

@@ -359,7 +359,7 @@
 //             </div>
 //             <div className="text-center lg:text-right">
 //               <p className="text-gray-400 text-sm mb-2">
-//                 © 2025 Nexus Finance. All rights reserved.
+//                 © 2025 Nexus Finance. 
 //               </p>
 //               <p className="text-gray-500 text-xs">
 //                 n Credit Licence (ACL) and professional finance advisory services

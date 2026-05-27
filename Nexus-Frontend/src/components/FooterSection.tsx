@@ -359,18 +359,6 @@ const FooterSection: React.FC = () => {
                         aria-required="true"
                       />
                     </div>
-                    <div>
-                      <input
-                        id="business-abn"
-                        name="business_abn"
-                        type="text"
-                        placeholder="Business ABN/ACN (If applicable)"
-                        className={`w-full rounded-xl p-4 border transition-all duration-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent ${isDarkMode
-                            ? 'bg-gray-800/50 border-gray-600 text-white placeholder-gray-400'
-                            : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-                          }`}
-                      />
-                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -541,26 +529,7 @@ const FooterSection: React.FC = () => {
                   );
                 })}
               </div>
-              <div className="text-center lg:text-right">
-                <p
-                  className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-sm mb-2`}
-                >
-                  © 2026 Nexus Finance. All rights reserved   
-                </p>
-                <p
-                  className={`${isDarkMode ? 'text-gray-500' : 'text-gray-500'} text-xs`}
-                >
-                  ABN: 73 685 074 631
-                  ACN: 685 074 631
-                  CRN No : 567862 under ACL 530764 of Finstead Capital Pty Ltd (Sub-Aggregator)
-                </p>
-                <p
-                  className={`${isDarkMode ? 'text-gray-500' : 'text-gray-500'} text-xs mt-1`}
-                >
-                  Commercial Finance Brokers
-                  Nexus Finance Pty Ltd - Parramatta, NSW,  & Adelaide, SA
-                </p>
-              </div>
+             
             </div>
           </div> */}
         </div>

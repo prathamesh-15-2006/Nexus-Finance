@@ -114,7 +114,6 @@ const submitLoanApplication = async (req, res) => {
       vehicle_year,
       vehicle_price,
       business_name,
-      business_abn,
       business_years,
       preferred_contact_method,
       preferred_contact_time,
@@ -216,7 +215,6 @@ const submitLoanApplication = async (req, res) => {
       vehicle_year,
       vehicle_price,
       business_name,
-      business_abn,
       business_years,
       preferred_contact_method,
       preferred_contact_time,
@@ -279,7 +277,7 @@ const submitLoanApplication = async (req, res) => {
       <h3>Loan-Specific Details</h3>
       ${loan_type === 'home' ? `<p><strong>Property Value:</strong> $${property_value}</p>` : ''}
       ${loan_type === 'car' ? `<p><strong>Vehicle Make:</strong> ${vehicle_make}</p><p><strong>Vehicle Model:</strong> ${vehicle_model}</p><p><strong>Vehicle Year:</strong> ${vehicle_year}</p><p><strong>Vehicle Price:</strong> $${vehicle_price}</p>` : ''}
-      ${loan_type === 'business' ? `<p><strong>Business Name:</strong> ${business_name}</p><p><strong>Business ABN:</strong> ${business_abn}</p><p><strong>Business Years:</strong> ${business_years}</p>` : ''}
+      ${loan_type === 'business' ? `<p><strong>Business Name:</strong> ${business_name}</p><p><strong>Business Years:</strong> ${business_years}</p>` : ''}
 
       <h3>Contact Preferences</h3>
       <p><strong>Preferred Contact Method:</strong> ${preferred_contact_method}</p>
@@ -290,10 +288,10 @@ const submitLoanApplication = async (req, res) => {
 
     // Send email to admin
     const adminEmailResult = await sendEmail({
-      email: "prathamesh@nexusfinance.com.au",
+      email: "prathameshkate7717@gmail.com",
       subject: adminSubject,
       message: adminMessage,
-      sender: "prathamesh@nexusfinance.com.au",
+      sender: "prathameshkate7717@gmail.com",
     });
 
     if (!adminEmailResult.success) {

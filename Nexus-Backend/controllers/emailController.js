@@ -8,6 +8,7 @@ const CustomEmailTemplate = require('../models/CustomEmailTemplate');
 const sendEmail = require('../utils/sendEmail');
 const emailTemplatesList = require('../emailTemplates');
 
+// Predefined plain-text templates used by sendEmailTemplate()
 const emailTemplates = {
   contact: {
     subject: "Thank You for Contacting nexus Finance",
@@ -22,11 +23,11 @@ If you have any urgent questions, please feel free to call us at your convenienc
 Best regards,
 nexus Finance Team
 Phone: {phone}
-Email: info@Nexusfinance.com.au
+Email: info@Nexusfinance.com.au`
   },
   partner: {
     subject: "Thank You for Your Interest in Partnering with nexus Finance",
-    body: `Dear {name},
+    body: String.raw`Dear {name},
 
 Thank you for your interest in partnering with nexus Finance. We value potential partnerships and believe in building strong relationships in the financial services industry.
 
@@ -52,7 +53,7 @@ We're here to help you find the right financing solution for your requirements.
 Best regards,
 nexus Finance Team
 Phone: {phone}
-Email: info@Nexusfinance.com.au
+Email: info@Nexusfinance.com.au`
   },
   loan: {
     subject: "Thank You for Your Loan Application Inquiry - nexus Finance",
@@ -83,7 +84,7 @@ Please let us know how we can be of further assistance.
 Best regards,
 nexus Finance Team
 Phone: {phone}
-Email: info@Nexusfinance.com.au
+Email: info@Nexusfinance.com.au`
   },
   welcome: {
     subject: "Welcome to nexus Finance - Your Trusted Financial Partner",
@@ -98,7 +99,7 @@ Feel free to reach out to us anytime with your questions or requirements.
 Best regards,
 nexus Finance Team
 Phone: {phone}
-Email: info@Nexusfinance.com.au
+Email: info@Nexusfinance.com.au`
   }
 };
 
@@ -242,6 +243,13 @@ const sendManualEmail = async (req, res) => {
       return res.status(400).json({ message: 'Template ID and To Email are required' });
     }
 
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(toEmail)) {
+      console.warn('Invalid email format:', toEmail);
+      return res.status(400).json({ message: 'Invalid email address format' });
+    }
+
     let htmlContent;
 
     if (isCustom) {
@@ -303,7 +311,7 @@ const sendManualEmail = async (req, res) => {
       email: toEmail,
       subject: subject || 'Custom Email', // Use provided subject or default
       message: htmlContent,
-      sender: process.env.EMAIL_FROM || 'info@Nexusfinance.com.au
+      sender: process.env.EMAIL_FROM || 'info@Nexusfinance.com.au'
     });
 
     if (emailResult && emailResult.success) {

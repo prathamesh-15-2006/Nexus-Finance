@@ -34,10 +34,7 @@ import Blog6 from "../src/components/Contact-Us/Blog6.jsx";
 import Patner from './components/PatnerWithUs/Patner.tsx';
 import ClientDeal from './components/PatnerWithUs/client-deal.tsx';
 import ApplicationForm from './components/ApplicationForm';
-import PrivacyPolicy from './components/Footer-Terms/Privacy-Policy';
-import PrivacyNonDisclosure from './components/Footer-Terms/Privacy-Non-disclosure';
-import TermsOfService from './components/Footer-Terms/Terms-of-Service';
-import CreditGuide from './components/Footer-Terms/Credit-Guide';
+
 import CalculatorUI from './components/CalculatorUI';
 import Team from './components/Team.tsx';
 import Services from './components/Services.tsx';
@@ -199,11 +196,7 @@ function App() {
             <Route path="/Nexus-Finance/Refinance/business-loan-consolidation" element={<BusinessLoans />} />
             <Route path="/Nexus-Finance/Refinance/business-loan-refinance" element={<BusinessLoans />} />
 
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/privacy-non-disclosure" element={<PrivacyNonDisclosure />} />
-            <Route path="/terms-of-service" element={<TermsOfService />} />
-            <Route path="/credit-guide" element={<CreditGuide />} />
-            {/* <Route path="/complaints-policy" element={<ComplaintsPolicy />} /> */}
+          
 
             {/* Admin Pannel Crm Routes */}
 

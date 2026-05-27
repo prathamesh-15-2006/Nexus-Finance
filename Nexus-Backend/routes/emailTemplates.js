@@ -33,8 +33,8 @@ const createTemplate = (title, preHeader, color) => `
       </div>
     </div>
     <div class="footer">
-      <p>&copy; ${new Date().getFullYear()} nexus Finance. All rights reserved.</p>
-      <p>ABN: 73 685 074 631 | Parramatta, NSW & Adelaide, SA</p>
+      <p>&copy; ${new Date().getFullYear()} nexus Finance. </p>
+      <p> | Parramatta, NSW & Adelaide, SA</p>
       <p><a href="mailto:info@Nexusfinance.com.au" style="color: #2563eb; text-decoration: none;">info@Nexusfinance.com.au</a></p>
     </div>
   </div>

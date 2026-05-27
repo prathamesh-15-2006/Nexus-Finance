@@ -48,12 +48,15 @@ export default function Login() {
         console.warn('Failed to fetch admin profile:', profileError);
         // Continue with login even if profile fetch fails
       }
+      // Update auth state with user data including avatar
       login({
         name: data.user?.name || 'Admin User',
         email: data.user?.email || email,
-        avatar: avatar
-      }); // Update auth state with user data including avatar
-      navigate('/Nexus-admin'); // Redirect to admin dashboard
+        avatar: avatar,
+      });
+
+      // Redirect to admin dashboard route configured in App.jsx
+      navigate('/Nexus-crm-admin');
     } catch (err: any) {
       setError(err.message || 'An unexpected error occurred.');
     } finally {
