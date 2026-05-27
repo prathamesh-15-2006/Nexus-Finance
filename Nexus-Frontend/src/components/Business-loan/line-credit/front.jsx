@@ -4,7 +4,7 @@ import Banner from '../../../asset/bgimgs/image.webp';
 import Benefits from './Benefits';
 import Faq from './Faq';
 import BusinessSection from './BusinessSection';
-import Card from './Card';
+import Card from './card';
 import Why_we from './Why_we';
 
 const cardGradient = "linear-gradient(135deg, #00005C 0%, #5252FF 40%, #7927A5 70%, #FB6FAE 100%)";
