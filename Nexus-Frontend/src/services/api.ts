@@ -1,6 +1,5 @@
-// API base URL: uses proxy in development, full URL in production
-const API_BASE_URL = import.meta.env.DEV ? '/api' : 'http://localhost:5000/api';
-// const API_BASE_URL = import.meta.env.DEV ? 'http://localhost:5000/api' : 'https://Nexusrm-new-backend.onrender.com/api';
+// API base URL: uses environment variable for flexibility across environments
+const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
 
 
 export interface Lead {
