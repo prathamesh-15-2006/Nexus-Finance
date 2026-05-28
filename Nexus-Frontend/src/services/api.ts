@@ -1,5 +1,9 @@
 // API base URL: uses environment variable for flexibility across environments
-const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
+// In development, use local backend on port 5000; in production, use the configured URL
+const API_BASE_URL = 
+  import.meta.env.MODE === 'development' 
+    ? 'http://localhost:5000/api'
+    : `${import.meta.env.VITE_API_URL}/api`;
 
 
 export interface Lead {

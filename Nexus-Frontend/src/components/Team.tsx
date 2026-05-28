@@ -185,7 +185,7 @@ const Team: React.FC<TeamProps> = ({ isDarkMode: propIsDarkMode }) => {
           </Stack>
 
           <Typography sx={{ color: isDarkMode ? "#cbd5e1" : "#555", transition: "color 0.5s ease" }} mb={3}>
-            With over 12 years of experience in the finance industry, Prathamesh leads
+            With over 2 years of experience in the finance industry, Prathamesh leads
             our team with a vision for innovative financial solutions. His
             expertise in business lending and client relations has helped
             thousands achieve their financial goals.
