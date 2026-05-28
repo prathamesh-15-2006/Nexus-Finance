@@ -13,6 +13,15 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Create Backend .env
+        run: |
+          echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> ./Nexus-Backend/.env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> ./Nexus-Backend/.env
+          echo "BREVO_API_KEY=${{ secrets.BREVO_API_KEY }}" >> ./Nexus-Backend/.env
+          echo "EMAIL_FROM=${{ secrets.EMAIL_FROM }}" >> ./Nexus-Backend/.env
+          echo "FRONTEND_URL=${{ secrets.FRONTEND_URL }}" >> ./Nexus-Backend/.env
+          echo "PORT=5000" >> ./Nexus-Backend/.env
+
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
@@ -34,3 +43,4 @@ jobs:
       - name: Push Frontend Image
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/frontend:latest
+
