@@ -612,6 +612,7 @@ export const sendEmail = async (leadId: string, leadType: string, templateKey: s
 
   const response = await fetch(`${API_BASE_URL}/emails/send`, {
     method: 'POST',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
@@ -730,6 +731,7 @@ export const sendManualEmail = async (templateId: string, recipientEmail: string
 
   const response = await fetch(`${API_BASE_URL}/emails/manual-send`, {
     method: 'POST',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
