@@ -319,7 +319,7 @@ const sendManualEmail = async (req, res) => {
       res.status(200).json({ message: 'Email sent successfully' });
     } else {
       console.error('Email sending failed:', emailResult);
-      res.status(500).json({ message: 'Failed to send email' });
+      res.status(500).json({ message: 'An error occurred while sending the email', success: false });
     }
   } catch (error) {
     console.error('Error sending manual email:', error);

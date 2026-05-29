@@ -32,11 +32,11 @@ const sendEmail = async ({ email, subject, message, sender }) => {
     }
 
     const data = await response.json();
-    console.log("Email sent:", data.messageId);
-    return { success: true };
+    console.log("Email sent successfully:", data.messageId);
+    return { success: true, messageId: data.messageId };
   } catch (error) {
-    console.error("Error sending email:", error);
-    return { success: false };
+    console.error("Error sending email:", error.message);
+    return { success: false, error: error.message };
   }
 };
 

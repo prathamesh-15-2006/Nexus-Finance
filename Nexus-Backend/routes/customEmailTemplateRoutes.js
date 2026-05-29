@@ -1,13 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const customEmailTemplateController = require('../controllers/customEmailTemplateController');
+const emailController = require('../controllers/emailController');
 const authMiddleware = require('../middlewares/authMiddleware');
 
-// Get all custom templates
-router.get('/', authMiddleware, customEmailTemplateController.getCustomTemplates);
+// Get available predefined templates (GET /)
+router.get('/', authMiddleware, emailController.getAvailableTemplates);
+
+// Get all custom templates (GET /custom)
+router.get('/custom', authMiddleware, customEmailTemplateController.getCustomTemplates);
 
 // Get a specific custom template
-router.get('/:id', authMiddleware, customEmailTemplateController.getCustomTemplate);
+router.get('/custom/:id', authMiddleware, customEmailTemplateController.getCustomTemplate);
 
 // Create a new custom template
 router.post('/', authMiddleware, customEmailTemplateController.createCustomTemplate);
