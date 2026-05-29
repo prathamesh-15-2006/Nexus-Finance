@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from '../../contexts/ThemeContext';
 import logo from '../../asset/logo/Nexus-logo.png';
+import api from '../../services/api';
 
 interface EmailTemplate {
   id: number;
@@ -403,24 +404,10 @@ export default function SalesEmailTemplates() {
 
     setSending(true);
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        setDialog({ isOpen: true, title: 'Authentication Error', message: 'Authentication required. Please log in again.' });
-        setSending(false);
-        return;
-      }
-
       const template = templates.find(t => t.id === selectedTemplate);
 
-      // Use relative /api so Vite proxy + same-origin rules apply consistently
-      const response = await fetch('/api/emails/manual-send', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(
-          (template as any)?.isCustom ? {
+      const payload = (template as any)?.isCustom
+        ? {
             templateId: (template as any)?.backendId || selectedTemplate.toString(),
             toEmail: recipientEmail,
             subject: customSubject || template?.subject,
@@ -428,7 +415,8 @@ export default function SalesEmailTemplates() {
               name: recipientName || 'Valued Customer'
             },
             isCustom: true
-          } : {
+          }
+        : {
             templateId: selectedTemplate.toString(),
             toEmail: recipientEmail,
             subject: customSubject || template?.subject,
@@ -437,28 +425,20 @@ export default function SalesEmailTemplates() {
               message: customContents[selectedTemplate] || ''
             },
             isCustom: false
-          }
-        ),
-      });
+          };
 
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.indexOf("application/json") !== -1) {
-        const data = await response.json();
-        if (response.ok) {
-          setDialog({ isOpen: true, title: 'Success', message: 'Email sent successfully!' });
-          setRecipientEmail('');
-          setRecipientName('');
-        } else {
-          setDialog({ isOpen: true, title: 'Error', message: `Failed to send: ${data.message}` });
-        }
-      } else {
-        // Handle non-JSON response (e.g., 404 HTML page)
-        const text = await response.text();
-        throw new Error(`Server returned ${response.status}: ${text.slice(0, 50)}...`);
-      }
-    } catch (error) {
+      const { data } = await api.post('/api/emails/manual-send', payload);
+
+      setDialog({
+        isOpen: true,
+        title: 'Success',
+        message: data.message || 'Email sent successfully!'
+      });
+      setRecipientEmail('');
+      setRecipientName('');
+    } catch (error: any) {
       console.error('Error sending email:', error);
-      setDialog({ isOpen: true, title: 'Error', message: 'An error occurred while sending the email.' });
+      setDialog({ isOpen: true, title: 'Error', message: error.response?.data?.message || 'An error occurred while sending the email.' });
     } finally {
       setSending(false);
     }
