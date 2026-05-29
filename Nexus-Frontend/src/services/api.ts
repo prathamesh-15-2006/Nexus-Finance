@@ -149,6 +149,24 @@ const mapLoanLead = (data: any): Lead => ({
   isArchived: data.isArchived || false,
 });
 
+const mapDraftLead = (data: any): Lead => ({
+  id: data._id || `draft-${Date.now()}`,
+  name: data.full_name || 'Unknown',
+  email: data.email || '',
+  phone: data.contact_number || '',
+  source: 'Website' as const,
+  status: 'New' as const,
+  assignedRep: 'Unassigned',
+  leadScore: 50,
+  createdAt: data.createdAt || new Date().toISOString(),
+  visitedPages: [],
+  remarks: data.loan_type ? `Loan Type: ${data.loan_type}` : 'Draft lead',
+  estimatedValue: undefined,
+  formType: 'Draft Lead',
+  type: 'draft-lead',
+  isArchived: data.isArchived || false,
+});
+
 const mapContactLead = (data: any): Lead => ({
   id: data._id || `contact-${Date.now()}`,
   name: data.name || 'Unknown',
@@ -261,6 +279,7 @@ export const fetchLeads = async (): Promise<Lead[]> => {
     return Array.isArray(leads) ? leads.map((item: any) => {
       if (item.type === 'pdf-preview') return mapPdfLead(item);
       if (item.type === 'loan-application') return mapLoanLead(item);
+      if (item.type === 'draft-lead') return mapDraftLead(item);
       
       return {
         id: item._id,
@@ -387,6 +406,7 @@ export const fetchArchivedLeads = async (): Promise<Lead[]> => {
     return Array.isArray(leads) ? leads.map((item: any) => {
       if (item.type === 'pdf-preview') return mapPdfLead(item);
       if (item.type === 'loan-application') return mapLoanLead(item);
+      if (item.type === 'draft-lead') return mapDraftLead(item);
       
       return {
         id: item._id,
@@ -421,7 +441,7 @@ export const fetchDraftLeads = async (): Promise<Lead[]> => {
   try {
     const { data } = await api.get('/api/loan-application/draft-leads');
     const draftLeads = data.draftLeads || [];
-    return Array.isArray(draftLeads) ? draftLeads.map(mapLoanLead) : [];
+    return Array.isArray(draftLeads) ? draftLeads.map(mapDraftLead) : [];
   } catch (error) {
     throw new Error('Failed to fetch draft leads');
   }

@@ -27,6 +27,10 @@ const draftLeadSchema = new mongoose.Schema({
     enum: ['draft', 'confirmed', 'expired'],
     default: 'draft',
   },
+  isArchived: {
+    type: Boolean,
+    default: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

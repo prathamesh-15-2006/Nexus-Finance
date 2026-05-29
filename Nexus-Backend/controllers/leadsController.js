@@ -4,6 +4,7 @@ const PdfPreview = require('../models/PdfPreview');
 const Lead = require('../models/leads');
 const ClientDeal = require('../models/ClientDeal');
 const PartnerApplication = require('../models/PartnerApplication');
+const DraftLead = require('../models/DraftLead');
 
 const getModelByType = (type) => {
   switch (type) {
@@ -19,6 +20,8 @@ const getModelByType = (type) => {
       return ClientDeal;
     case 'partner-application':
       return PartnerApplication;
+    case 'draft-lead':
+      return DraftLead;
     default:
       return null;
   }
@@ -38,6 +41,7 @@ const fetchAndCombineLeads = async (query) => {
       { model: Lead, type: 'lead', dateKey: 'submittedAt' },
       { model: ClientDeal, type: 'client-deal', dateKey: 'submittedAt' },
       { model: PartnerApplication, type: 'partner-application', dateKey: 'appliedAt' },
+      { model: DraftLead, type: 'draft-lead', dateKey: 'createdAt' },
     ];
 
     const promises = sources.map(source =>
