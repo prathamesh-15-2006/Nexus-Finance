@@ -80,7 +80,6 @@ export default function FaqSection() {
       <Typography 
         variant="h3" 
         sx={{ 
-          fontWeight: "bold", 
           mb: 4, 
           
                                              fontWeight:800,

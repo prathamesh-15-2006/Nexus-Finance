@@ -105,7 +105,6 @@ export default function FaqSection() {
         variant="h2" 
         sx={{ 
           fontWeight: "bold", 
-          mb: 4, 
           textAlign: 'center',
           background: "linear-gradient(135deg, #00005C 0%, #5252FF 40%, #7927A5 70%, #FB6FAE 100%)",
           WebkitBackgroundClip: "text",

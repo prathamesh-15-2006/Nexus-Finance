@@ -402,8 +402,6 @@ export default function HeroSection() {
                                                                                      fontWeight: 700,
                                                                                      backgroundClip: "text",
                                                                                      textFillColor: "transparent",
-                                                                                                                                            fontWeight:800,
-
                                                                                      WebkitBackgroundClip: "text",
                                                                                      WebkitTextFillColor: "transparent",
                                                                                      mb: 3,

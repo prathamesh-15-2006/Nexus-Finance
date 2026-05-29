@@ -25,6 +25,7 @@
     "express": "^5.1.0",
     "framer-motion": "^12.23.12",
     "html2canvas": "^1.4.1",
+    "jquery": "^4.0.0",
     "jspdf": "^3.0.2",
     "jspdf-autotable": "^5.0.2",
     "lucide-react": "^0.560.0",
