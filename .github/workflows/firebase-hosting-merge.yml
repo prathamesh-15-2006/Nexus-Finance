@@ -23,3 +23,4 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_NEXUS_FINANCE_935E5 }}
           channelId: live
           projectId: nexus-finance-935e5
+          entryPoint: ./Nexus-Frontend
