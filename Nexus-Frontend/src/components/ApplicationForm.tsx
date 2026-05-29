@@ -137,7 +137,7 @@ export default function ApplicationForm({ initialLoanType }: ApplicationFormProp
   };
 
   const validatePhone = (phone: string): boolean => {
-    const phoneRegex = /^(\+?61|0)[2-478](?:[ -]?[0-9]){8}$/;
+    const phoneRegex = /^(?:\+?91|0)?[6-9]\d{9}$/;
     return phoneRegex.test(phone.replace(/\s/g, ''));
   };
 
@@ -179,7 +179,7 @@ export default function ApplicationForm({ initialLoanType }: ApplicationFormProp
         if (!formData.contact_number?.trim()) {
           newErrors.contact_number = 'Phone number is required';
         } else if (!validatePhone(formData.contact_number)) {
-          newErrors.contact_number = 'Please enter a valid n phone number';
+          newErrors.contact_number = 'Please enter a valid Indian phone number';
         }
         if (!formData.date_of_birth) {
           newErrors.date_of_birth = 'Date of birth is required';
@@ -440,18 +440,23 @@ export default function ApplicationForm({ initialLoanType }: ApplicationFormProp
                       What type of loan do you need? *
                     </label>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                      {['home', 'property'].map((type) => (
+                      {[
+                        { id: 'business', label: 'Business Loan' },
+                        { id: 'property', label: 'Loan Against Property' },
+                        { id: 'car', label: 'Vehicle Loan' },
+                        { id: 'equipment', label: 'Solar & Equipment Finance' }
+                      ].map((item) => (
                         <button
-                          key={type}
+                          key={item.id}
                           type="button"
-                          onClick={() => updateField('loan_type', type)}
+                          onClick={() => updateField('loan_type', item.id)}
                           className={`px-4 py-3 rounded-xl font-semibold capitalize transition-all ${
-                            formData.loan_type === type
+                            formData.loan_type === item.id
                               ? 'bg-gradient-to-r from-blue-600 to-green-600 text-white shadow-lg scale-105'
                               : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
                           }`}
                         >
-                          {type}
+                          {item.label}
                         </button>
                       ))}
                     </div>

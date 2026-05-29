@@ -4,6 +4,7 @@ import { motion, useAnimation, AnimatePresence, useScroll, useSpring } from 'fra
 import { useInView } from 'react-intersection-observer';
 import { ArrowForward } from '@mui/icons-material';
 import { useTheme } from '../../contexts/ThemeContext';
+import { submitPartnerApplication } from '../../services/api';
 import {
   Shield,
   Users,
@@ -124,19 +125,7 @@ const Patner = () => {
   };
 
   try {
-    const response = await fetch("/api/partners/apply", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to submit form");
-    }
-
-    const result = await response.json();
+    const result = await submitPartnerApplication(payload);
     console.log("Server Response:", result);
 
     setSubmitMessage("Form submitted successfully! We will contact you soon.");

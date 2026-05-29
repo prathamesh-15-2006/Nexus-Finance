@@ -47,7 +47,7 @@ const ContactPage = () => {
           }}
         >
           <Button
-            onClick={() => window.open('https://Nexusfinance.afos.io/business-loans/quick-quote', '_blank')}
+            onClick={() => window.open('/?openInquiry=business', '_blank')}
             variant="contained"
             sx={{
               background: "linear-gradient(135deg, #00005C 0%, #5252FF 40%, #7927A5 70%, #FB6FAE 100%)",

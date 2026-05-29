@@ -67,7 +67,7 @@ export default function Front() {
             </Typography>
             <Box sx={{ textAlign: "center", mt: 4 }}>
               <Button
-                                 onClick={() => window.open('https://Nexusfinance.afos.io/business-loans/quick-quote', '_blank')}
+                                 onClick={() => window.open('/?openInquiry=business', '_blank')}
 
                 variant="contained"
                 size="large"

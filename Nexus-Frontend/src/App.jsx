@@ -1,5 +1,5 @@
 import React, { useEffect, Suspense, lazy } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
 const Calculator = lazy(() => import('./components/Calculator'));
 const About = lazy(() => import('./components/About'));
@@ -55,8 +55,8 @@ import Profile from './components/pages/Profile.tsx';
 import EmailTemplates from './components/pages/EmailTemplates.tsx';
 import SalesEmailTemplates from './components/pages/SalesEmailTemplates.tsx';
 import Login from './components/login/LoginForm.tsx';
-import ProtectedRoute from './components/login/ProtectedRoute.tsx'; // Import ProtectedRoute
-// import ResetPasswordForm from './Nexus-CRM/components/ResetForm.tsx';
+import ProtectedRoute from './components/login/ProtectedRoute.tsx';
+import ResetPasswordForm from './components/login/ResetPasswordForm.tsx';
 import { HelmetProvider } from "react-helmet-async";
 
 
@@ -131,7 +131,7 @@ function App() {
     },
   });
 
-  const isAdminRoute = location.pathname.startsWith('/Nexus-crm-admin');
+  const isAdminRoute = location.pathname.startsWith('/Nexus-crm-admin') || location.pathname.startsWith('/Nexus-admin');
 
   return (
     <HelmetProvider>
@@ -200,14 +200,13 @@ function App() {
 
             {/* Admin Pannel Crm Routes */}
 
-             {/* Public Routes */}
         <Route path="/login" element={<Login />} />
-        {/* <Route path="/reset-password/:token" element={<ResetPasswordForm />} /> */}
+        <Route path="/reset-password/:token" element={<ResetPasswordForm />} />
 
         {/* Protected Routes: Everything else requires login */}
         {/* We use ProtectedRoute as the wrapper */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/Nexus-crm-admin" element={<Layout />}>
+          <Route path="/Nexus-admin" element={<Layout />}>
             <Route index element={<Dashboard />} />
             <Route path="leads" element={<Leads />} />
             <Route path="analytics" element={<Analytics />} />
@@ -217,6 +216,8 @@ function App() {
             <Route path="email-templates" element={<EmailTemplates />} />
             <Route path="sales-email-templates" element={<SalesEmailTemplates />} />
           </Route>
+          {/* Legacy redirect for Nexus-crm-admin */}
+          <Route path="/Nexus-crm-admin/*" element={<Navigate to="/Nexus-admin" replace />} />
         </Route>
         
         {/* Optional: Add a catch-all route for 404 handling */}

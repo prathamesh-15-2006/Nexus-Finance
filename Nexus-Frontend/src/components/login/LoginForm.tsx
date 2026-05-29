@@ -56,7 +56,7 @@ export default function Login() {
       });
 
       // Redirect to admin dashboard route configured in App.jsx
-      navigate('/Nexus-crm-admin');
+      navigate('/Nexus-admin');
     } catch (err: any) {
       setError(err.message || 'An unexpected error occurred.');
     } finally {

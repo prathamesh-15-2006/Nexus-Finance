@@ -10,5 +10,6 @@ router.get('/lead-details/:type/:id', authMiddleware, emailController.getLeadDet
 // Manual email sending (Admin UI)
 router.get('/templates', authMiddleware, emailController.getAvailableTemplates);
 router.post('/manual-send', authMiddleware, emailController.sendManualEmail);
+router.post('/send', authMiddleware, emailController.sendEmailFromTemplatesPage);
 
 module.exports = router;

@@ -4,6 +4,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
 import logo from '../asset/logo/Nexus-logo.png';
 import memberFallback from '../asset/experts/leader.png';
+import { submitContactForm } from '../services/api';
 
 import {
   Phone, Mail, MapPin,
@@ -41,23 +42,8 @@ const FooterSection: React.FC = () => {
     });
 
     try {
-      const response = await fetch('/api/contact/submit', {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      console.log("HTTP status:", response.status);
-
-      const result = await response.json().catch(() => null);
+      const result = await submitContactForm(data);
       console.log("Server response:", result);
-
-      if (!response.ok) {
-        throw new Error(result?.message || `Backend returned status ${response.status}`);
-      }
 
       formRef.current.reset();
       setStatus({ type: "success", message: "✅ Message sent successfully!" });

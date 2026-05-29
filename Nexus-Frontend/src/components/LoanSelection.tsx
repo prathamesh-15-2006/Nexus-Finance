@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { createDraftLead } from '../services/api';
 import carImage from '../asset/bgimgs/car.webp';
 import businessImage from '../asset/patner/business.webp';
@@ -10,17 +10,9 @@ import assetImage from '../asset/assetfinance.webp';
 const loanOptions = [
   { name: "Business Loans", image: businessImage },
   { name: "Business Loan Against Property", image: propertyImage },
-  { name: " Vehicle Loan", image: carImage },
+  { name: "Vehicle Loan", image: carImage },
   { name: "Other Finances", image: assetImage },
 ];
-
-const externalUrls: { [key: string]: string } = {
-  'Business Loans': 'https://Nexusfinance.afos.io/business-loans/quick-quote',
-  // 'Commercial Vehicle Loan': 'https://Nexusfinance.afos.io/business-loans/quick-quote',
-  ' Vehicle Loan': 'https://Nexusfinance.afos.io/car-loans/quick-quote',
-  'Other Finances': 'https://Nexusfinance.afos.io/business-loans/quick-quote',
-  
-};
 
 interface LoanSelectionProps {
   isDarkMode: boolean;
@@ -34,41 +26,49 @@ const LoanSelection: React.FC<LoanSelectionProps> = ({ isDarkMode }) => {
   const [phoneError, setPhoneError] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const handleCardClick = (optionName: string) => {
-    if (optionName === "Business Loan Against Property") {
-      setSelected(optionName);
-      setShowForm(true);
-      setPhoneError(false); // Reset error when opening
-      setEmailError(false); // Reset email error when opening
-    } else {
-      const externalUrl = externalUrls[optionName];
-      if (externalUrl) {
-        window.open(externalUrl, '_blank');
-      } else {
-        const loanTypeMap: { [key: string]: string } = {
-          'Business Loans': 'business',
-          'Business Loan Against Property': 'property',
-          'Commercial Vehicle Loan': 'car',
-          'Other Finances': 'equipment'
-        };
-        const loanType = loanTypeMap[optionName] || optionName.toLowerCase();
-        window.open(`/apply?loanType=${loanType}`, '_blank');
+  useEffect(() => {
+    const openInquiry = searchParams.get('openInquiry');
+    if (openInquiry) {
+      const map: { [key: string]: string } = {
+        business: 'Business Loans',
+        property: 'Business Loan Against Property',
+        car: 'Vehicle Loan',
+        equipment: 'Other Finances'
+      };
+      const optionName = map[openInquiry];
+      if (optionName) {
+        setSelected(optionName);
+        setShowForm(true);
+        setPhoneError(false);
+        setEmailError(false);
+        // Clear search parameter so it doesn't reopen if the user closes it or refreshes
+        const newParams = new URLSearchParams(searchParams);
+        newParams.delete('openInquiry');
+        setSearchParams(newParams, { replace: true });
       }
     }
+  }, [searchParams, setSearchParams]);
+
+  const handleCardClick = (optionName: string) => {
+    setSelected(optionName);
+    setShowForm(true);
+    setPhoneError(false); // Reset error when opening
+    setEmailError(false); // Reset email error when opening
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Phone Regex (only mobiles starting with 04)
-    const ausPhoneRegex = /^(?:\+?61|0)4(?:[ -]?[0-9]){8}$/;
+    // Phone Regex (Indian mobiles)
+    const indPhoneRegex = /^(?:\+?91|0)?[6-9]\d{9}$/;
 
     // Email Regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     // Manual Validation Check
-    if (!ausPhoneRegex.test(formData.contact)) {
+    if (!indPhoneRegex.test(formData.contact.replace(/\s/g, ''))) {
       setPhoneError(true); // Show red error text instead of alert
       return;
     }
@@ -84,13 +84,12 @@ const LoanSelection: React.FC<LoanSelectionProps> = ({ isDarkMode }) => {
     const loanTypeMap: { [key: string]: string } = {
       'Business Loans': 'business',
       'Business Loan Against Property': 'property',
-      'Commercial Vehicle Loan': 'car',
+      'Vehicle Loan': 'car',
       'Other Finances': 'equipment'
     };
 
-    const loanType = loanTypeMap[selected || ''] || (selected ? selected.toLowerCase() : 'home');
-    const externalUrl = externalUrls[selected || ''];
-    const targetUrl = externalUrl || `/apply?loanType=${loanType}`;
+    const loanType = loanTypeMap[selected || ''] || 'business';
+    const targetUrl = `/apply?loanType=${loanType}`;
 
     // Store form data in localStorage for auto-fill
     localStorage.setItem('loanSelectionData', JSON.stringify({
@@ -223,7 +222,7 @@ const LoanSelection: React.FC<LoanSelectionProps> = ({ isDarkMode }) => {
                     />
                     {phoneError && (
                       <p className="text-red-500 text-xs mt-1 font-semibold italic">
-                        * Please enter a valid umber.
+                        * Please enter a valid Indian phone number.
                       </p>
                     )}
                   </div>

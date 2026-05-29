@@ -199,7 +199,7 @@ export default function Leads() {
   const filteredLeads = leads.filter(lead => {
 
     const matchesSearch = (lead.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         (lead.email || '').toLowerCase().includes(searchTerm.toLowerCase());
+      (lead.email || '').toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterValue === 'all' || lead.status === filterValue || lead.source === filterValue;
     const leadDate = new Date(lead.createdAt);
     const start = startDate ? new Date(startDate) : null;
@@ -539,25 +539,24 @@ export default function Leads() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        isDarkMode ? (
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${isDarkMode ? (
                           lead.status === 'New' ? 'bg-gray-700 text-gray-200' :
-                          lead.status === 'Contacted' ? 'bg-blue-900 text-blue-200' :
-                          lead.status === 'Qualified' ? 'bg-yellow-900 text-yellow-200' :
-                          lead.status === 'Proposal' ? 'bg-purple-900 text-purple-200' :
-                          lead.status === 'Negotiation' ? 'bg-orange-900 text-orange-200' :
-                          lead.status === 'Referred' ? 'bg-purple-900 text-purple-200' :
-                          'bg-red-900 text-red-200'
+                            lead.status === 'Contacted' ? 'bg-blue-900 text-blue-200' :
+                              lead.status === 'Qualified' ? 'bg-yellow-900 text-yellow-200' :
+                                lead.status === 'Proposal' ? 'bg-purple-900 text-purple-200' :
+                                  lead.status === 'Negotiation' ? 'bg-orange-900 text-orange-200' :
+                                    lead.status === 'Referred' ? 'bg-purple-900 text-purple-200' :
+                                      'bg-red-900 text-red-200'
                         ) : (
                           lead.status === 'New' ? 'bg-gray-100 text-gray-800' :
-                          lead.status === 'Contacted' ? 'bg-blue-100 text-blue-800' :
-                          lead.status === 'Qualified' ? 'bg-yellow-100 text-yellow-800' :
-                          lead.status === 'Proposal' ? 'bg-purple-100 text-purple-800' :
-                          lead.status === 'Negotiation' ? 'bg-orange-100 text-orange-800' :
-                          lead.status === 'Referred' ? 'bg-purple-100 text-purple-800' :
-                          'bg-red-100 text-red-800'
+                            lead.status === 'Contacted' ? 'bg-blue-100 text-blue-800' :
+                              lead.status === 'Qualified' ? 'bg-yellow-100 text-yellow-800' :
+                                lead.status === 'Proposal' ? 'bg-purple-100 text-purple-800' :
+                                  lead.status === 'Negotiation' ? 'bg-orange-100 text-orange-800' :
+                                    lead.status === 'Referred' ? 'bg-purple-100 text-purple-800' :
+                                      'bg-red-100 text-red-800'
                         )
-                      }`}>
+                        }`}>
                         {lead.status}
                       </span>
                     </td>
@@ -676,25 +675,24 @@ export default function Leads() {
                 <div>
                   <label className={`text-xs font-semibold uppercase ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Status</label>
                   <p className="mt-1">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      isDarkMode ? (
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${isDarkMode ? (
                         selectedLead.status === 'New' ? 'bg-gray-700 text-gray-200' :
-                        selectedLead.status === 'Contacted' ? 'bg-blue-900 text-blue-200' :
-                        selectedLead.status === 'Qualified' ? 'bg-yellow-900 text-yellow-200' :
-                        selectedLead.status === 'Proposal' ? 'bg-purple-900 text-purple-200' :
-                        selectedLead.status === 'Negotiation' ? 'bg-orange-900 text-orange-200' :
-                        selectedLead.status === 'Referred' ? 'bg-purple-900 text-purple-200' :
-                        'bg-red-900 text-red-200'
+                          selectedLead.status === 'Contacted' ? 'bg-blue-900 text-blue-200' :
+                            selectedLead.status === 'Qualified' ? 'bg-yellow-900 text-yellow-200' :
+                              selectedLead.status === 'Proposal' ? 'bg-purple-900 text-purple-200' :
+                                selectedLead.status === 'Negotiation' ? 'bg-orange-900 text-orange-200' :
+                                  selectedLead.status === 'Referred' ? 'bg-purple-900 text-purple-200' :
+                                    'bg-red-900 text-red-200'
                       ) : (
                         selectedLead.status === 'New' ? 'bg-gray-100 text-gray-800' :
-                        selectedLead.status === 'Contacted' ? 'bg-blue-100 text-blue-800' :
-                        selectedLead.status === 'Qualified' ? 'bg-yellow-100 text-yellow-800' :
-                        selectedLead.status === 'Proposal' ? 'bg-purple-100 text-purple-800' :
-                        selectedLead.status === 'Negotiation' ? 'bg-orange-100 text-orange-800' :
-                        selectedLead.status === 'Referred' ? 'bg-purple-100 text-purple-800' :
-                        'bg-red-100 text-red-800'
+                          selectedLead.status === 'Contacted' ? 'bg-blue-100 text-blue-800' :
+                            selectedLead.status === 'Qualified' ? 'bg-yellow-100 text-yellow-800' :
+                              selectedLead.status === 'Proposal' ? 'bg-purple-100 text-purple-800' :
+                                selectedLead.status === 'Negotiation' ? 'bg-orange-100 text-orange-800' :
+                                  selectedLead.status === 'Referred' ? 'bg-purple-100 text-purple-800' :
+                                    'bg-red-100 text-red-800'
                       )
-                    }`}>
+                      }`}>
                       {selectedLead.status}
                     </span>
                   </p>
@@ -877,10 +875,10 @@ export default function Leads() {
                     {statuses
                       .filter(status => status !== 'all' && status !== 'Closed Won' && status !== 'Closed Lost')
                       .map(status => (
-                      <option key={status} value={status}>
-                        {status}
-                      </option>
-                    ))}
+                        <option key={status} value={status}>
+                          {status}
+                        </option>
+                      ))}
                   </select>
                 </div>
                 <div>
@@ -1182,7 +1180,7 @@ export default function Leads() {
             <div className="p-6">
               <div className={`${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'} p-4 rounded-lg mb-4`}>
                 <pre className={`text-sm ${isDarkMode ? 'text-gray-200' : 'text-gray-800'} whitespace-pre-wrap font-mono`}>
-{`Lead ID: ${viewMoreLead.id}
+                  {`Lead ID: ${viewMoreLead.id}
 Name: ${viewMoreLead.name}
 Email: ${viewMoreLead.email}
 Phone: ${viewMoreLead.phone}

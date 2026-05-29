@@ -51,8 +51,8 @@ const businessLoansItems = [
   ];
 
   const assetFINANCEItems = [
-     {name:'BUSINESS VEHICLE LOANS', link: 'Nexus-Finance/Asset-Finance/Business-vehicle-loans'},
-     {name:'SOLAR EQUIPMENT FINANCE', link: 'Nexus-Finance/Asset-Finance/Solar-equipment-finance'}
+     {name:'BUSINESS VEHICLE LOANS', link: '/?openInquiry=car'},
+     {name:'SOLAR EQUIPMENT FINANCE', link: '/?openInquiry=equipment'}
   ];
 
   const blogItems = [];

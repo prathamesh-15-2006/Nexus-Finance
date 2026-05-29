@@ -57,8 +57,7 @@ const Tax = () => {
               Professional tax debt solutions tailored for n businesses
             </p>
             <button
-                                             onClick={() => window.open('https://Nexusfinance.afos.io/business-loans/quick-quote', '_blank')}
-
+              onClick={() => window.open('/?openInquiry=business', '_blank')}
               className={`mt-8 px-8 py-3 font-semibold text-lg text-white rounded-xl shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl ${gradientButtonClass}`}
             >
               Get Started

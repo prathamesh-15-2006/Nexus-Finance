@@ -21,10 +21,10 @@ export default function Sammer() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const ausPhoneRegex = /^(?:\+?61|0)4(?:[ -]?[0-9]){8}$/;
+    const indPhoneRegex = /^(?:\+?91|0)?[6-9]\d{9}$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!ausPhoneRegex.test(formData.contact)) {
+    if (!indPhoneRegex.test(formData.contact.replace(/\s/g, ''))) {
       setPhoneError(true);
       return;
     }
@@ -216,7 +216,7 @@ export default function Sammer() {
                     />
                     {phoneError && (
                       <p className="text-red-500 text-xs mt-1 font-semibold italic">
-                        * Please enter a valid n phone number.
+                        * Please enter a valid Indian phone number.
                       </p>
                     )}
                   </div>

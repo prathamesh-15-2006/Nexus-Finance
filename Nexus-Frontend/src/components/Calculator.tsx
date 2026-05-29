@@ -36,6 +36,7 @@ import {
 import { styled } from '@mui/material/styles';
 import { useTheme } from '../contexts/ThemeContext';
 import { useNavigate } from 'react-router-dom';
+import { submitPdfPreviewForm } from '../services/api';
 import { Line, Bar, Pie } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -343,24 +344,7 @@ const handleBackendSubmit = async (e: React.FormEvent) => {
       message: formData.description.trim() || "N/A",
     };
 
-    const backendUrl = "/api/pdf-preview/submit";
-
-    const response = await fetch(backendUrl, {
-      method: "POST",
-      headers: { 
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      const text = await response.text();
-      console.error("Backend response:", text);
-      throw new Error(`Failed to submit form. Status: ${response.status}`);
-    }
-
-    const result = await response.json();
+    const result = await submitPdfPreviewForm(payload);
 
     // If backend sends a download link
     if (result.downloadUrl) {

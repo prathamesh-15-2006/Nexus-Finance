@@ -116,6 +116,13 @@ const Vehicle = () => {
             >
               t Approvals • Low-Doc Options • Competitive Rates
             </p>
+            <button
+              onClick={() => window.open('/?openInquiry=car', '_blank')}
+              className="mt-6 bg-nexus-gradient text-white px-8 py-3 rounded-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 font-semibold text-lg relative overflow-hidden group inline-flex items-center justify-center border-none cursor-pointer"
+            >
+              <span className="relative z-10">Get Started Today</span>
+              <div className="absolute inset-0 bg-nexus-gradient opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </button>
           </div>
         </div>
       </section>

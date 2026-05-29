@@ -645,4 +645,40 @@ export const sendManualEmail = async (payload: {
   }
 };
 
+export const submitContactForm = async (contactData: any): Promise<any> => {
+  try {
+    const { data } = await api.post('/api/contact', contactData);
+    return data;
+  } catch (error) {
+    throw new Error('Failed to submit contact form');
+  }
+};
+
+export const submitPartnerApplication = async (partnerData: any): Promise<any> => {
+  try {
+    const { data } = await api.post('/api/partners/apply', partnerData);
+    return data;
+  } catch (error) {
+    throw new Error('Failed to submit partner application');
+  }
+};
+
+export const submitClientDeal = async (dealData: any): Promise<any> => {
+  try {
+    const { data } = await api.post('/api/deals', dealData);
+    return data;
+  } catch (error) {
+    throw new Error('Failed to submit client deal');
+  }
+};
+
+export const submitPdfPreviewForm = async (formData: any): Promise<any> => {
+  try {
+    const { data } = await api.post('/api/pdf-preview/submit', formData);
+    return data;
+  } catch (error) {
+    throw new Error('Failed to submit PDF preview form');
+  }
+};
+
 export default api;

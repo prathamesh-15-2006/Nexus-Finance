@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { submitClientDeal } from '../../services/api';
 import {
   Container,
   Paper,
@@ -77,7 +78,7 @@ export default function ClientDealForm() {
   };
 
   const validatePhone = (phone: string): boolean => {
-    const phoneRegex = /^(\+?61|0)[2-478](?:[ -]?[0-9]){8}$/;
+    const phoneRegex = /^(?:\+?91|0)?[6-9]\d{9}$/;
     return phoneRegex.test(phone.replace(/\s/g, ''));
   };
 
@@ -106,7 +107,7 @@ export default function ClientDealForm() {
     if (!formData.contactNo.trim()) {
       newErrors.contactNo = 'Contact number is required';
     } else if (!validatePhone(formData.contactNo)) {
-      newErrors.contactNo = 'Please enter a valid umber';
+      newErrors.contactNo = 'Please enter a valid Indian phone number';
     }
     if (formData.loanAmount <= 0) newErrors.loanAmount = 'Loan amount must be greater than 0';
     if (formData.clientRevenue <= 0) newErrors.clientRevenue = 'Client monthly revenue must be greater than 0';
@@ -131,14 +132,7 @@ export default function ClientDealForm() {
 
     setIsSubmitting(true);
     try {
-      // Replace emailjs with fetch to backend
-      const response = await fetch('/api/deals/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) throw new Error('Network response was not ok');
+      await submitClientDeal(formData);
 
       setIsSubmitted(true);
     } catch (error) {
