@@ -630,9 +630,15 @@ export const deleteCustomTemplate = async (id: string): Promise<void> => {
   }
 };
 
-export const sendManualEmail = async (templateId: string, recipientEmail: string, subject: string, content: string): Promise<any> => {
+export const sendManualEmail = async (payload: {
+  templateId: string;
+  toEmail: string;
+  subject?: string;
+  dynamicValues?: Record<string, any>;
+  isCustom?: boolean;
+}): Promise<any> => {
   try {
-    const { data } = await api.post('/api/emails/manual-send', { templateId, recipientEmail, subject, content });
+    const { data } = await api.post('/api/emails/manual-send', payload);
     return data;
   } catch (error) {
     throw new Error('Failed to send manual email');

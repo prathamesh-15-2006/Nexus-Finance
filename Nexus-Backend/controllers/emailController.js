@@ -169,17 +169,12 @@ const sendManualEmail = async (req, res) => {
 
     console.log(`Sending email to ${toEmail}`);
 
-    const emailResult = await Promise.race([
-      sendEmail({
-        email: toEmail,
-        subject: subject || 'Custom Email',
-        message: htmlContent,
-        sender: process.env.EMAIL_FROM || 'info@Nexusfinance.com.au'
-      }),
-      new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Email timeout (controller guard)')), 20000)
-      )
-    ]);
+    const emailResult = await sendEmail({
+      email: toEmail,
+      subject: subject || 'Custom Email',
+      message: htmlContent,
+      sender: process.env.EMAIL_FROM || 'info@Nexusfinance.com.au'
+    });
 
     if (emailResult?.success) {
       return res.status(200).json({
@@ -210,4 +205,3 @@ module.exports = {
   getAvailableTemplates,
   sendManualEmail
 };
-

@@ -21,47 +21,26 @@ const sendEmail = async ({ email, subject, message, sender }) => {
       htmlContent: message,
     };
 
-    const MAX_RETRIES = 3;
-    let attempt = 0;
+    console.log("BREVO:", !!process.env.BREVO_API_KEY);
+    console.log("FROM:", process.env.EMAIL_FROM);
+    console.log(`[Email] Initiating request to Brevo for ${email}...`);
+    const startTime = Date.now();
 
-    while (attempt < MAX_RETRIES) {
-      try {
-        attempt++;
-        console.log(`[Email] Attempt ${attempt}: Initiating request to Brevo for ${email}...`);
-        const startTime = Date.now();
+    const response = await axios.post("https://api.brevo.com/v3/smtp/email", payload, {
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "api-key": process.env.BREVO_API_KEY,
+      },
+      timeout: 15000,
+    });
 
-        const response = await axios.post("https://api.brevo.com/v3/smtp/email", payload, {
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "api-key": process.env.BREVO_API_KEY,
-          },
-          // Strict 6-second timeout to prevent the connection from hanging forever
-          timeout: 6000,
-        });
+    console.log(`[Email] Success! Response time: ${Date.now() - startTime}ms. Message ID: ${response.data.messageId}`);
 
-        console.log(`[Email] Success! Response time: ${Date.now() - startTime}ms. Message ID: ${response.data.messageId}`);
-
-        return {
-          success: true,
-          messageId: response.data.messageId,
-        };
-      } catch (error) {
-        console.error(`[Email] Attempt ${attempt} failed:`, {
-          message: error.message,
-          status: error.response?.status,
-          code: error.code, // Will log 'ECONNABORTED' if it times out
-        });
-
-        if (attempt === MAX_RETRIES) {
-          throw new Error(`[Email] Fatal: Failed to send email after ${MAX_RETRIES} attempts.`);
-        }
-
-        const delay = Math.pow(2, attempt) * 1000; // 2s, 4s...
-        console.log(`[Email] Retrying in ${delay}ms...`);
-        await new Promise((resolve) => setTimeout(resolve, delay));
-      }
-    }
+    return {
+      success: true,
+      messageId: response.data.messageId,
+    };
   } catch (error) {
     console.error("Error sending email:", error.message);
 
