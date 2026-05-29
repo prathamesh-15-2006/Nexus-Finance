@@ -137,7 +137,7 @@ function App() {
     <HelmetProvider>
       <MuiThemeProvider theme={muiTheme}>
         <div className={`min-h-screen transition-colors duration-500 bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50`}>
-         {/* <FinanceCursor /> */}
+          {/* <FinanceCursor /> */}
           {!isAdminRoute && <Header isDarkMode={isDarkMode} toggleTheme={toggleTheme} />}
           <Routes>
             <Route path="/" element={
@@ -159,15 +159,15 @@ function App() {
               </Suspense>
             } />
             <Route path="/Nexus-Finance/Business-loans" element={<BusinessLoans />} />
-           <Route path="/Nexus-Finance/Business-loans/Unsecured-business-loans" element={<Unsecured />} />
+            <Route path="/Nexus-Finance/Business-loans/Unsecured-business-loans" element={<Unsecured />} />
             <Route path="/Nexus-Finance/Business-loans/Business-line-of-credit" element={<FrontPage />} />
             <Route path="/Nexus-Finance/Business-loans/Business-overdraft" element={<BusinessOverdraftPage />} />
             <Route path="Nexus-Finance/Property-Finance/Loan-against-property" element={<Sameer />} />
             <Route path="/Nexus-Finance/Business-loans/Low-doc-business-loans" element={<LowDoc />} />
-            <Route path="/Nexus-Finance/Business-loans/Debtor-&-invoice-finance" element={<Finance/>} />
+            <Route path="/Nexus-Finance/Business-loans/Debtor-&-invoice-finance" element={<Finance />} />
             <Route path="/Nexus-Finance/Business-loans/Medical-&-health-loans" element={<Specialist />} />
             <Route path="/Nexus-Finance/Business-loans/Ato-tax-debt-loans" element={<Tax />} />
-            <Route path="Nexus-Finance/Asset-Finance/Business-vehicle-loans" element={<Vehical/>} />
+            <Route path="Nexus-Finance/Asset-Finance/Business-vehicle-loans" element={<Vehical />} />
             <Route path="/Nexus-Finance/Business-loans/Trade-finance" element={<Trade />} />
             <Route path="/Nexus-Finance/Business-loans/Start-up-business-loans" element={<Startup />} />
             <Route path="/Nexus-Finance/Asset-Finance" element={<AssetFinance />} />
@@ -182,7 +182,7 @@ function App() {
             <Route path="/Client-Deals" element={<ClientDeal />} />
             <Route path="/apply" element={<ApplicationForm />} />
             <Route path="/Blog/Understanding-Business-Credit-Scores" element={<Blog6 />} />
-           
+
             <Route path="/calculator" element={<Calculator />} />
 
             {/* Routes for Blog Keywords */}
@@ -196,32 +196,32 @@ function App() {
             <Route path="/Nexus-Finance/Refinance/business-loan-consolidation" element={<BusinessLoans />} />
             <Route path="/Nexus-Finance/Refinance/business-loan-refinance" element={<BusinessLoans />} />
 
-          
+
 
             {/* Admin Pannel Crm Routes */}
 
-        <Route path="/login" element={<Login />} />
-        <Route path="/reset-password/:token" element={<ResetPasswordForm />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/reset-password/:token" element={<ResetPasswordForm />} />
 
-        {/* Protected Routes: Everything else requires login */}
-        {/* We use ProtectedRoute as the wrapper */}
-        <Route element={<ProtectedRoute />}>
-          <Route path="/Nexus-admin" element={<Layout />}>
-            <Route index element={<Dashboard />} />
-            <Route path="leads" element={<Leads />} />
-            <Route path="analytics" element={<Analytics />} />
-            <Route path="team" element={<SalesTeam />} />
-            <Route path="settings" element={<Settings />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="email-templates" element={<EmailTemplates />} />
-            <Route path="sales-email-templates" element={<SalesEmailTemplates />} />
-          </Route>
-          {/* Legacy redirect for Nexus-crm-admin */}
-          <Route path="/Nexus-crm-admin/*" element={<Navigate to="/Nexus-admin" replace />} />
-        </Route>
-        
-        {/* Optional: Add a catch-all route for 404 handling */}
-        <Route path="*" element={<div>404 Not Found</div>} />
+            {/* Protected Routes: Everything else requires login */}
+            {/* We use ProtectedRoute as the wrapper */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/Nexus-admin" element={<Layout />}>
+                <Route index element={<Dashboard />} />
+                <Route path="leads" element={<Leads />} />
+                <Route path="analytics" element={<Analytics />} />
+                <Route path="team" element={<SalesTeam />} />
+                <Route path="settings" element={<Settings />} />
+                <Route path="profile" element={<Profile />} />
+                <Route path="email-templates" element={<EmailTemplates />} />
+                <Route path="sales-email-templates" element={<SalesEmailTemplates />} />
+              </Route>
+              {/* Legacy redirect for Nexus-crm-admin */}
+              <Route path="/Nexus-crm-admin/*" element={<Navigate to="/Nexus-admin" replace />} />
+            </Route>
+
+            {/* Optional: Add a catch-all route for 404 handling */}
+            <Route path="*" element={<div>404 Not Found</div>} />
 
           </Routes>
           {!isAdminRoute && <FooterSection />}
