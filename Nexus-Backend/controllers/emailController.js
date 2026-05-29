@@ -314,16 +314,30 @@ const sendManualEmail = async (req, res) => {
       sender: process.env.EMAIL_FROM || 'info@Nexusfinance.com.au'
     });
 
+    console.log('Email result:', JSON.stringify(emailResult));
+
     if (emailResult && emailResult.success) {
       // Step 9: Save Email History (Recommended - Logic to be added if Log model exists)
-      res.status(200).json({ message: 'Email sent successfully' });
+      res.status(200).json({ 
+        message: 'Email sent successfully',
+        success: true,
+        messageId: emailResult.messageId 
+      });
     } else {
       console.error('Email sending failed:', emailResult);
-      res.status(500).json({ message: 'An error occurred while sending the email', success: false });
+      res.status(500).json({ 
+        message: `An error occurred while sending the email: ${emailResult?.error || 'Unknown error'}`, 
+        success: false,
+        error: emailResult?.error 
+      });
     }
   } catch (error) {
     console.error('Error sending manual email:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ 
+      message: 'Server error', 
+      success: false,
+      error: error.message 
+    });
   }
 };
 
