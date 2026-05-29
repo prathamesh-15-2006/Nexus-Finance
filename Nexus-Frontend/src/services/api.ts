@@ -588,8 +588,8 @@ export const sendEmail = async (leadId: string, leadType: string, templateKey: s
 
 export const createCustomTemplate = async (templateData: Omit<CustomTemplate, '_id' | 'createdBy' | 'createdAt' | 'updatedAt'>): Promise<CustomTemplate> => {
   try {
-    const { data } = await api.post('/api/custom-templates', templateData);
-    return data;
+    const { data } = await api.post('/api/templates', templateData);
+    return data.data;
   } catch (error) {
     throw new Error('Failed to create custom template');
   }
@@ -597,8 +597,8 @@ export const createCustomTemplate = async (templateData: Omit<CustomTemplate, '_
 
 export const getAllCustomTemplates = async (): Promise<CustomTemplate[]> => {
   try {
-    const { data } = await api.get('/api/custom-templates');
-    return data;
+    const { data } = await api.get('/api/templates/custom');
+    return data.data;
   } catch (error) {
     throw new Error('Failed to fetch custom templates');
   }
@@ -606,8 +606,8 @@ export const getAllCustomTemplates = async (): Promise<CustomTemplate[]> => {
 
 export const getCustomTemplate = async (id: string): Promise<CustomTemplate> => {
   try {
-    const { data } = await api.get(`/api/custom-templates/${id}`);
-    return data;
+    const { data } = await api.get(`/api/templates/custom/${id}`);
+    return data.data;
   } catch (error) {
     throw new Error('Failed to fetch custom template');
   }
@@ -615,8 +615,8 @@ export const getCustomTemplate = async (id: string): Promise<CustomTemplate> => 
 
 export const updateCustomTemplate = async (id: string, templateData: Partial<Omit<CustomTemplate, '_id' | 'createdBy' | 'createdAt' | 'updatedAt'>>): Promise<CustomTemplate> => {
   try {
-    const { data } = await api.put(`/api/custom-templates/${id}`, templateData);
-    return data;
+    const { data } = await api.put(`/api/templates/${id}`, templateData);
+    return data.data;
   } catch (error) {
     throw new Error('Failed to update custom template');
   }
@@ -624,7 +624,7 @@ export const updateCustomTemplate = async (id: string, templateData: Partial<Omi
 
 export const deleteCustomTemplate = async (id: string): Promise<void> => {
   try {
-    await api.delete(`/api/custom-templates/${id}`);
+    await api.delete(`/api/templates/${id}`);
   } catch (error) {
     throw new Error('Failed to delete custom template');
   }

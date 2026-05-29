@@ -1,4 +1,4 @@
-const sendEmail = require('../utils/sendEmail');
+const sendEmail = require('./utils/sendEmail');
 
 const handleEmailRequest = async (req, res) => {
   console.log(`\n--- [API] New Email Request ---`);

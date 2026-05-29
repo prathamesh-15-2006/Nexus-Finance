@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from '../../contexts/ThemeContext';
 import logo from '../../asset/logo/Nexus-logo.png';
-import api from '../../services/api';
+import api, { getAllCustomTemplates, createCustomTemplate, deleteCustomTemplate } from '../../services/api';
 
 interface EmailTemplate {
   id: number;
@@ -125,33 +125,25 @@ export default function SalesEmailTemplates() {
         const token = localStorage.getItem('token');
         if (!token) return;
 
-        const response = await fetch('https://Nexus-new-backend.onrender.com/api/templates', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          // Data is wrapped in {success, data: [...], count}
-          if (data.success && Array.isArray(data.data)) {
-            const formattedTemplates = data.data.map((template: any) => ({
-              id: template._id,
-              title: template.title || 'Custom Template',
-              subject: template.subject || 'Custom Subject',
-              icon: template.icon || '🎨',
-              color: template.color || 'from-pink-500 to-rose-500',
-              preview: template.content || template.body || '',
-              isCustom: true,
-              backendId: template._id
-            }));
-            setTemplates(prev => {
-              // Avoid duplicates by checking if template already exists
-              const existingIds = new Set(prev.map(t => t.id));
-              const newTemplates = formattedTemplates.filter(t => !existingIds.has(t.id));
-              return [...prev, ...newTemplates];
-            });
-          }
+        const data = await getAllCustomTemplates();
+        
+        if (Array.isArray(data)) {
+          const formattedTemplates = data.map((template: any) => ({
+            id: template._id,
+            title: template.title || 'Custom Template',
+            subject: template.subject || 'Custom Subject',
+            icon: template.icon || '🎨',
+            color: template.color || 'from-pink-500 to-rose-500',
+            preview: template.content || template.body || '',
+            isCustom: true,
+            backendId: template._id
+          }));
+          setTemplates(prev => {
+            // Avoid duplicates by checking if template already exists
+            const existingIds = new Set(prev.map(t => t.id));
+            const newTemplates = formattedTemplates.filter(t => !existingIds.has(t.id));
+            return [...prev, ...newTemplates];
+          });
         }
       } catch (error) {
         console.error('Error loading custom templates:', error);
@@ -175,71 +167,47 @@ export default function SalesEmailTemplates() {
     const htmlContent = compileBlocksToHTML(builderBlocks);
 
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        setDialog({ isOpen: true, title: 'Authentication Error', message: 'Authentication required. Please log in again.' });
-        return;
-      }
-
-      const response = await fetch('https://Nexus-new-backend.onrender.com/api/templates', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          title: newTemplate.title,
-          subject: newTemplate.subject,
-          content: htmlContent,
-          icon: '🎨',
-          color: 'from-pink-500 to-rose-500',
-          customStyles: `body { font-family: Arial, sans-serif; }`
-        }),
+      const data = await createCustomTemplate({
+        title: newTemplate.title,
+        subject: newTemplate.subject,
+        content: htmlContent,
+        icon: '🎨',
+        color: 'from-pink-500 to-rose-500',
+        customStyles: `body { font-family: Arial, sans-serif; }`
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (data) {
         // Reload templates from API to automatically include the new one
-        const loadResponse = await fetch('https://Nexus-new-backend.onrender.com/api/templates', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (loadResponse.ok) {
-          const loadData = await loadResponse.json();
-          if (loadData.success && Array.isArray(loadData.data)) {
-            const formattedTemplates = loadData.data.map((template: any) => ({
-              id: template._id,
-              title: template.title || 'Custom Template',
-              subject: template.subject || 'Custom Subject',
-              icon: template.icon || '🎨',
-              color: template.color || 'from-pink-500 to-rose-500',
-              preview: template.content || template.body || '',
-              isCustom: true,
-              backendId: template._id
-            }));
-            setTemplates([...initialEmailTemplates, ...formattedTemplates]);
-            // Set custom contents for all custom templates
-            const newCustomContents: { [key: string]: string } = {};
-            formattedTemplates.forEach((template: any) => {
-              newCustomContents[template.id] = template.preview;
-            });
-            setCustomContents(newCustomContents);
-          }
+        const loadData = await getAllCustomTemplates();
+        
+        if (Array.isArray(loadData)) {
+          const formattedTemplates = loadData.map((template: any) => ({
+            id: template._id,
+            title: template.title || 'Custom Template',
+            subject: template.subject || 'Custom Subject',
+            icon: template.icon || '🎨',
+            color: template.color || 'from-pink-500 to-rose-500',
+            preview: template.content || template.body || '',
+            isCustom: true,
+            backendId: template._id
+          }));
+          setTemplates([...initialEmailTemplates, ...formattedTemplates]);
+          // Set custom contents for all custom templates
+          const newCustomContents: { [key: string]: string } = {};
+          formattedTemplates.forEach((template: any) => {
+            newCustomContents[template.id] = template.preview;
+          });
+          setCustomContents(newCustomContents);
         }
 
         setIsCreating(false);
         setNewTemplate({ title: '', subject: '' });
         setBuilderBlocks([]);
         setDialog({ isOpen: true, title: 'Success', message: 'Template created successfully!' });
-      } else {
-        setDialog({ isOpen: true, title: 'Error', message: `Failed to create template: ${data.message}` });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating template:', error);
-      setDialog({ isOpen: true, title: 'Error', message: 'An error occurred while creating the template.' });
+      setDialog({ isOpen: true, title: 'Error', message: error.message || 'An error occurred while creating the template.' });
     }
   };
 
