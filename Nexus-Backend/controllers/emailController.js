@@ -2,6 +2,36 @@ const CustomEmailTemplate = require('../models/CustomEmailTemplate');
 const emailTemplatesList = require('../routes/emailTemplates');
 const sendEmail = require('../utils/sendEmail');
 
+// Import all lead models
+const Contact = require('../models/Contact');
+const LoanApplication = require('../models/LoanApplication');
+const PdfPreview = require('../models/PdfPreview');
+const Lead = require('../models/leads');
+const ClientDeal = require('../models/ClientDeal');
+const PartnerApplication = require('../models/PartnerApplication');
+const DraftLead = require('../models/DraftLead');
+
+const getModelByType = (type) => {
+  switch (type) {
+    case 'contact':
+      return Contact;
+    case 'loan-application':
+      return LoanApplication;
+    case 'pdf-preview':
+      return PdfPreview;
+    case 'lead':
+      return Lead;
+    case 'client-deal':
+      return ClientDeal;
+    case 'partner-application':
+      return PartnerApplication;
+    case 'draft-lead':
+      return DraftLead;
+    default:
+      return null;
+  }
+};
+
 // --- Predefined template sending (automated) ---
 // NOTE: routes/emailRoutes.js expects these handlers to exist.
 const sendEmailTemplate = async (req, res) => {
@@ -347,13 +377,62 @@ const sendEmailFromTemplatesPage = async (req, res) => {
       });
     }
 
-    // 1. Fetch Lead from Lead Model
-    const Lead = require('../models/leads');
-    const lead = await Lead.findById(leadId);
+    // 1. Resolve correct Model and Fetch Lead
+    const Model = getModelByType(type);
+    if (!Model) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid lead type '${type}'`
+      });
+    }
+
+    const lead = await Model.findById(leadId);
     if (!lead) {
       return res.status(404).json({
         success: false,
-        message: 'Lead not found'
+        message: `Lead of type '${type}' with ID '${leadId}' not found`
+      });
+    }
+
+    // Normalize name, email, phone from any model type
+    let leadName = 'Valued Customer';
+    let leadEmail = '';
+    let leadPhone = '';
+
+    if (type === 'loan-application') {
+      leadName = lead.full_name || '';
+      leadEmail = lead.email || '';
+      leadPhone = lead.contact_number || '';
+    } else if (type === 'partner-application') {
+      leadName = (lead.firstName && lead.lastName) ? `${lead.firstName} ${lead.lastName}` : (lead.fullName || lead.firstName || lead.lastName || '');
+      leadEmail = lead.email || '';
+      leadPhone = lead.contactNo || lead.phone || '';
+    } else if (type === 'client-deal') {
+      leadName = (lead.clientFirstName && lead.clientLastName) ? `${lead.clientFirstName} ${lead.clientLastName}` : (lead.clientName || lead.clientFirstName || lead.clientLastName || '');
+      leadEmail = lead.clientEmail || lead.email || '';
+      leadPhone = lead.clientContactNo || lead.contactNo || '';
+    } else if (type === 'contact') {
+      leadName = lead.name || '';
+      leadEmail = lead.email || '';
+      leadPhone = lead.phone || '';
+    } else if (type === 'pdf-preview') {
+      leadName = lead.fullName || '';
+      leadEmail = lead.email || '';
+      leadPhone = lead.contactNumber || lead.phone || '';
+    } else if (type === 'draft-lead') {
+      leadName = lead.full_name || '';
+      leadEmail = lead.email || '';
+      leadPhone = lead.contact_number || '';
+    } else {
+      leadName = lead.name || lead.full_name || lead.fullName || 'Valued Customer';
+      leadEmail = lead.email || '';
+      leadPhone = lead.phone || lead.contact_number || lead.contactNo || '';
+    }
+
+    if (!leadEmail) {
+      return res.status(400).json({
+        success: false,
+        message: 'Lead does not have a valid email address'
       });
     }
 
@@ -388,16 +467,16 @@ const sendEmailFromTemplatesPage = async (req, res) => {
       }
 
       subject = template.subject;
-      htmlContent = wrapInHtml(template.subject, template.body, lead.name);
+      htmlContent = wrapInHtml(template.subject, template.body, leadName);
     }
 
     // 3. Replace Placeholder Fields ({name}, {phone}, {email})
     const replacePlaceholders = (text) => {
       if (!text) return '';
       return text
-        .replace(/{name}/g, lead.name || 'Valued Customer')
-        .replace(/{phone}/g, lead.phone || '')
-        .replace(/{email}/g, lead.email || '');
+        .replace(/{name}/g, leadName)
+        .replace(/{phone}/g, leadPhone)
+        .replace(/{email}/g, leadEmail);
     };
 
     subject = replacePlaceholders(subject);
@@ -405,7 +484,7 @@ const sendEmailFromTemplatesPage = async (req, res) => {
 
     // 4. Dispatch Email using robust sendEmail
     const emailResult = await sendEmail({
-      email: lead.email,
+      email: leadEmail,
       subject: subject,
       message: htmlContent,
       sender: process.env.EMAIL_FROM || 'info@Nexusfinance.com.au'
