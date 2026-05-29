@@ -7,6 +7,9 @@ const authMiddleware = require('../middlewares/authMiddleware');
 // Get available predefined templates (GET /)
 router.get('/', authMiddleware, emailController.getAvailableTemplates);
 
+// Get template statistics (must come before /:id to avoid route collision)
+router.get('/stats/overview', authMiddleware, customEmailTemplateController.getTemplateStats);
+
 // Get all custom templates (GET /custom)
 router.get('/custom', authMiddleware, customEmailTemplateController.getCustomTemplates);
 
@@ -21,8 +24,5 @@ router.put('/:id', authMiddleware, customEmailTemplateController.updateCustomTem
 
 // Delete a custom template
 router.delete('/:id', authMiddleware, customEmailTemplateController.deleteCustomTemplate);
-
-// Get template statistics
-router.get('/stats/overview', authMiddleware, customEmailTemplateController.getTemplateStats);
 
 module.exports = router;
