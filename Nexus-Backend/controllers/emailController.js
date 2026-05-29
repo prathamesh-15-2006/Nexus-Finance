@@ -99,6 +99,13 @@ const sendManualEmail = async (req, res) => {
 
     let { templateId, toEmail, subject, dynamicValues, isCustom } = req.body;
 
+    if (dynamicValues == null || typeof dynamicValues !== 'object') {
+      dynamicValues = {};
+    }
+
+    // Normalize custom flag coming from frontend (can be "false"/"true" or boolean)
+    const customFlag = isCustom === true || isCustom === 'true';
+
     if (!templateId || !toEmail) {
       return res.status(400).json({
         message: 'Template ID and To Email are required',
@@ -116,7 +123,7 @@ const sendManualEmail = async (req, res) => {
 
     let htmlContent;
 
-    if (isCustom) {
+    if (customFlag) {
       const customTemplate = await CustomEmailTemplate.findOne({
         _id: templateId,
         userId: req.admin.id,

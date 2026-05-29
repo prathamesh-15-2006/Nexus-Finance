@@ -154,8 +154,7 @@ exports.forgotPassword = async (req, res) => {
     const resetToken = createPasswordResetToken(admin);
     await admin.save({ validateBeforeSave: false });
 
-    // const resetURL = `https://nexus-crm-admin.web.app/reset-password/${resetToken}`;
-    const resetURL = `https://nexus-finance.web.app/reset-password/${resetToken}`;
+    const resetURL = `https://nexus-finance-935e5.web.app/reset-password/${resetToken}`;
 
     const message = `
       <h2>Password Reset</h2>

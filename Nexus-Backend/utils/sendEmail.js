@@ -21,15 +21,24 @@ const sendEmail = async ({ email, subject, message, sender }) => {
 
     console.log("Sending email via Brevo to:", email);
 
-    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "api-key": process.env.BREVO_API_KEY,
-      },
-      body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(15000), // 15s hard timeout (IMPORTANT FIX)
-    });
+    // 15s hard timeout (AbortSignal.timeout is supported in modern Node, but keep guard-friendly)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(new Error('Brevo API request timed out after 15000ms')), 15000);
+
+    let response;
+    try {
+      response = await fetch("https://api.brevo.com/v3/smtp/email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "api-key": process.env.BREVO_API_KEY,
+        },
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeoutId);
+    }
 
     const data = await response.json().catch(() => ({}));
 
