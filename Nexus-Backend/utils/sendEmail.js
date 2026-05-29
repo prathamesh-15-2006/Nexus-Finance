@@ -1,3 +1,5 @@
+const axios = require('axios');
+
 const sendEmail = async ({ email, subject, message, sender }) => {
   try {
     if (!process.env.BREVO_API_KEY || !process.env.EMAIL_FROM) {
@@ -19,41 +21,47 @@ const sendEmail = async ({ email, subject, message, sender }) => {
       htmlContent: message,
     };
 
-    console.log("Sending email via Brevo to:", email);
+    const MAX_RETRIES = 3;
+    let attempt = 0;
 
-    // 15s hard timeout (AbortSignal.timeout is supported in modern Node, but keep guard-friendly)
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(new Error('Brevo API request timed out after 15000ms')), 15000);
+    while (attempt < MAX_RETRIES) {
+      try {
+        attempt++;
+        console.log(`[Email] Attempt ${attempt}: Initiating request to Brevo for ${email}...`);
+        const startTime = Date.now();
 
-    let response;
-    try {
-      response = await fetch("https://api.brevo.com/v3/smtp/email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "api-key": process.env.BREVO_API_KEY,
-        },
-        body: JSON.stringify(payload),
-        signal: controller.signal,
-      });
-    } finally {
-      clearTimeout(timeoutId);
+        const response = await axios.post("https://api.brevo.com/v3/smtp/email", payload, {
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "api-key": process.env.BREVO_API_KEY,
+          },
+          // Strict 6-second timeout to prevent the connection from hanging forever
+          timeout: 6000,
+        });
+
+        console.log(`[Email] Success! Response time: ${Date.now() - startTime}ms. Message ID: ${response.data.messageId}`);
+
+        return {
+          success: true,
+          messageId: response.data.messageId,
+        };
+      } catch (error) {
+        console.error(`[Email] Attempt ${attempt} failed:`, {
+          message: error.message,
+          status: error.response?.status,
+          code: error.code, // Will log 'ECONNABORTED' if it times out
+        });
+
+        if (attempt === MAX_RETRIES) {
+          throw new Error(`[Email] Fatal: Failed to send email after ${MAX_RETRIES} attempts.`);
+        }
+
+        const delay = Math.pow(2, attempt) * 1000; // 2s, 4s...
+        console.log(`[Email] Retrying in ${delay}ms...`);
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
     }
-
-    const data = await response.json().catch(() => ({}));
-
-    if (!response.ok) {
-      throw new Error(
-        `Brevo API error (${response.status}): ${data.message || response.statusText}`
-      );
-    }
-
-    console.log("Email sent successfully. Message ID:", data.messageId);
-
-    return {
-      success: true,
-      messageId: data.messageId,
-    };
   } catch (error) {
     console.error("Error sending email:", error.message);
 
